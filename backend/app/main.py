@@ -85,12 +85,12 @@ async def root():
 
 
 # ============================================================================
-# IMPORT ROUTES (will be added in next steps)
+# IMPORT ROUTES
 # ============================================================================
 
-# from app.routes import documents, chat
-# app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
-# app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
+from app.routes import documents, chat
+app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
+app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
 
 
 if __name__ == "__main__":

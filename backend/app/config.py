@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     chat_history_turns: int = 3
     
     # LLM Settings
-    llm_model: str = "gemini-1.5-flash"
+    llm_model: str = "gemini-1.5-flash-latest"  # Correct model name for Gemini
     embedding_model: str = "models/text-embedding-004"
     embedding_dimension: int = 768  # Gemini embeddings are 768-dimensional
     
