@@ -1,12 +1,43 @@
 /**
  * Answer panel component - displays LLM answer with inline citations and sources
  */
+import { useState } from 'react';
 import SourceCard from './SourceCard';
 
 export default function AnswerPanel({ response }) {
+  const [selectedSourceId, setSelectedSourceId] = useState(null);
+  const [showAllSources, setShowAllSources] = useState(false);
+
   if (!response) return null;
 
   const { answer, sources, has_context, general_answer, timing, token_usage } = response;
+
+  // Convert citations in answer to clickable links
+  const renderAnswerWithClickableCitations = (text) => {
+    // Match citations like [1], [2], [3]
+    const parts = text.split(/(\[\d+\])/g);
+    
+    return parts.map((part, index) => {
+      const match = part.match(/\[(\d+)\]/);
+      if (match) {
+        const citationId = parseInt(match[1]);
+        return (
+          <span
+            key={index}
+            className="citation-link"
+            onClick={() => {
+              setSelectedSourceId(citationId);
+              setShowAllSources(true);
+            }}
+            title={`Click to see source ${citationId}`}
+          >
+            {part}
+          </span>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
 
   return (
     <div className="answer-panel">
@@ -16,7 +47,12 @@ export default function AnswerPanel({ response }) {
           <div className="answer-header">
             <span className="answer-label">✓ Answer from Documents</span>
           </div>
-          <div className="answer-text">{answer}</div>
+          <div className="answer-text">
+            {renderAnswerWithClickableCitations(answer)}
+          </div>
+          <div className="citation-hint">
+            💡 Click on citations like [1] to see the source
+          </div>
         </div>
       ) : (
         <div className="answer-section no-context">
@@ -37,15 +73,31 @@ export default function AnswerPanel({ response }) {
         </div>
       )}
 
-      {/* Sources */}
+      {/* Sources - Show/Hide Toggle */}
       {sources && sources.length > 0 && (
         <div className="sources-section">
-          <h3>📚 Sources</h3>
-          <div className="sources-list">
-            {sources.map((source) => (
-              <SourceCard key={source.id} source={source} />
-            ))}
+          <div className="sources-header">
+            <h3>📚 Sources ({sources.length})</h3>
+            <button
+              className="btn-toggle-sources"
+              onClick={() => setShowAllSources(!showAllSources)}
+            >
+              {showAllSources ? '▼ Hide Sources' : '▶ Show All Sources'}
+            </button>
           </div>
+          
+          {showAllSources && (
+            <div className="sources-list">
+              {sources.map((source) => (
+                <SourceCard
+                  key={source.id}
+                  source={source}
+                  isHighlighted={selectedSourceId === source.id}
+                  onExpand={() => setSelectedSourceId(source.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 

@@ -1,16 +1,38 @@
 /**
  * Source card component - displays expandable source references
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function SourceCard({ source }) {
+export default function SourceCard({ source, isHighlighted, onExpand }) {
   const [expanded, setExpanded] = useState(false);
 
+  // Auto-expand when highlighted
+  useEffect(() => {
+    if (isHighlighted) {
+      setExpanded(true);
+      // Scroll to this card
+      setTimeout(() => {
+        const element = document.getElementById(`source-${source.id}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 100);
+    }
+  }, [isHighlighted, source.id]);
+
+  const handleClick = () => {
+    setExpanded(!expanded);
+    if (onExpand) onExpand();
+  };
+
   return (
-    <div className="source-card">
+    <div
+      id={`source-${source.id}`}
+      className={`source-card ${isHighlighted ? 'highlighted' : ''}`}
+    >
       <div 
         className="source-header"
-        onClick={() => setExpanded(!expanded)}
+        onClick={handleClick}
       >
         <span className="source-id">[{source.id}]</span>
         <span className="source-document">{source.document}</span>
