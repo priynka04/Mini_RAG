@@ -9,8 +9,8 @@ from typing import List
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     
-    # OpenAI Configuration
-    openai_api_key: str
+    # Google Gemini Configuration
+    google_api_key: str
     
     # Qdrant Cloud Configuration
     qdrant_url: str
@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     chat_history_turns: int = 3
     
     # LLM Settings
-    llm_model: str = "gpt-4o-mini"
-    embedding_model: str = "text-embedding-3-small"
-    embedding_dimension: int = 1536
+    llm_model: str = "gemini-1.5-flash"
+    embedding_model: str = "models/text-embedding-004"
+    embedding_dimension: int = 768  # Gemini embeddings are 768-dimensional
     
     # CORS Settings
     allowed_origins: str = "http://localhost:5173,http://localhost:3000"

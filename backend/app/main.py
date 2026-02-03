@@ -69,7 +69,7 @@ async def health_check():
     return HealthResponse(
         status="healthy",
         qdrant_connected=False,  # Will implement in next step
-        openai_configured=bool(settings.openai_api_key),
+        openai_configured=bool(settings.google_api_key),  # Using Gemini instead
         cohere_configured=bool(settings.cohere_api_key)
     )
 
