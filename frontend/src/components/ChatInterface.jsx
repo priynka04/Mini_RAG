@@ -19,10 +19,12 @@ export default function ChatInterface({ conversationId, onFirstMessage }) {
 
   // Reset chat when conversation changes
   useEffect(() => {
-    setChatHistory([]);
-    setCurrentResponse(null);
-    setError(null);
-    setQuery('');
+    if (conversationId) {
+      setChatHistory([]);
+      setCurrentResponse(null);
+      setError(null);
+      setQuery('');
+    }
   }, [conversationId]);
 
   // Auto-scroll to bottom
@@ -122,14 +124,17 @@ export default function ChatInterface({ conversationId, onFirstMessage }) {
         ) : (
           <>
             {chatHistory.map((msg, idx) => (
-               <div key={idx}>
+              <div key={idx}>
                 {msg.role === 'user' ? (
-                  <MessageBubble message={msg.content} isUser={true} />
-              ) : (
+                  <MessageBubble
+                    message={msg.content}
+                    isUser={true}
+                  />
+                ) : (
                   msg.response && <AnswerPanel response={msg.response} />
                 )}
-            </div>
-          ))}
+              </div>
+            ))}
             <div ref={chatEndRef} />
           </>
         )}

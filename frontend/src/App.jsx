@@ -10,20 +10,18 @@ import './index.css';
 function App() {
   const [stats, setStats] = useState(null);
   const [health, setHealth] = useState(null);
-  const [conversations, setConversations] = useState([
-    {
-      id: 1,
-      title: 'Deep Learning Discussion',
-      timestamp: Date.now() - 3600000,
-      preview: 'What is deep learning...'
-    }
-  ]);
-  const [activeConversationId, setActiveConversationId] = useState(1);
+  const [conversations, setConversations] = useState([]);
+  const [activeConversationId, setActiveConversationId] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
   useEffect(() => {
     checkHealth();
     fetchStats();
+    
+    // Create initial conversation if none exists
+    if (conversations.length === 0) {
+      createNewConversation();
+    }
   }, []);
 
   const checkHealth = async () => {
@@ -56,7 +54,7 @@ function App() {
       timestamp: Date.now(),
       preview: ''
     };
-    setConversations([newConv, ...conversations]);
+    setConversations(prev => [newConv, ...prev]);
     setActiveConversationId(newConv.id);
   };
 
