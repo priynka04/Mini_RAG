@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Qdrant Cloud Configuration
     qdrant_url: str
     qdrant_api_key: str
-    qdrant_collection_name: str = "rag_docs"
+    qdrant_collection_name: str = "rag_doc"
     
     # Cohere Configuration (for reranking)
     cohere_api_key: str

@@ -13,15 +13,42 @@ function App() {
   const [forceUpdate, setForceUpdate] = useState(0);
 
   useEffect(() => {
-    // Check health on mount
-    checkHealth();
+    // ONE-TIME INITIALIZATION ON PAGE LOAD
+    // This runs ONCE when the component mounts (empty dependency array)
     
-    // Clear sessions on page load/reload - START FRESH
-    localStorage.removeItem('rag_sessions');
+    const initializeApp = async () => {
+      // Step 1: Reset vector database (only in development, optional guard)
+      if (import.meta.env.DEV) {
+        try {
+          const response = await fetch('http://localhost:8000/api/chat/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log('✓ Vector DB reset:', data.message);
+          } else {
+            console.warn('Vector DB reset failed:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error resetting vector DB:', error);
+          // Don't block app initialization on reset failure
+        }
+      }
+      
+      // Step 2: Check health
+      checkHealth();
+      
+      // Step 3: Clear sessions - START FRESH
+      localStorage.removeItem('rag_sessions');
+      
+      // Step 4: Create first session
+      createNewSession();
+    };
     
-    // Create first session
-    createNewSession();
-  }, []);
+    initializeApp();
+  }, []); // EMPTY DEPENDENCY ARRAY = runs once on mount only
 
   // Save sessions whenever they change
   useEffect(() => {
