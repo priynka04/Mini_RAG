@@ -940,7 +940,7 @@ VITE_BACKEND_URL=https://mini-rag-1-1xne.onrender.com # Development
 3. **Environment Variables**: (See Configuration section)
 4. **Deploy**: Automatic on git push
 
-**Live URL**: [https://your-backend.onrender.com](https://your-backend.onrender.com)
+**Live URL**: [https://mini-rag-1-1xne.onrender.com](https://mini-rag-1-1xne.onrender.com)
 
 ### Production Considerations
 
