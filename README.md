@@ -17,6 +17,8 @@ A production-ready Retrieval-Augmented Generation (RAG) system with multi-docume
 - [Features](#-features)
 - [Architecture](#-architecture)
 - [System Components](#-system-components)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
 - [Quick Start](#-quick-start)
 - [Configuration](#-configuration)
 - [Evaluation Results](#-evaluation-results)
@@ -297,6 +299,229 @@ USER
 **Context Window**: Includes last 3 conversation turns (6 messages) for multi-turn coherence
 
 ---
+
+## 🛠 Technology Stack
+
+### Frontend Stack
+
+| Category | Technology | Version | Purpose |
+|----------|-----------|---------|---------|
+| **Framework** | React | 18.2.0 | UI Component Library |
+| **Build Tool** | Vite | 5.0.11 | Fast Dev Server & Bundler |
+| **Language** | JavaScript (ES6+) | - | Programming Language |
+| **HTTP Client** | Axios | 1.6.5 | API Communication |
+| **Styling** | Custom CSS | - | UI Styling & Theming |
+| **State Management** | React Hooks | - | Component State |
+| **Routing** | React Router DOM | 6.21.1 | Client-side Navigation |
+| **Icons** | Lucide React | 0.294.0 | Icon Components |
+| **Markdown** | React Markdown | 9.0.1 | Markdown Rendering |
+| **Code Highlighting** | React Syntax Highlighter | 15.5.0 | Code Block Styling |
+
+**Frontend Dependencies (`frontend/package.json`)**:
+```json
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
+    "axios": "^1.6.5",
+    "lucide-react": "^0.294.0",
+    "react-markdown": "^9.0.1",
+    "react-syntax-highlighter": "^15.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.11",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2"
+  }
+}
+```
+
+### Backend Stack
+
+| Category | Technology | Version | Purpose |
+|----------|-----------|---------|---------|
+| **Framework** | FastAPI | 0.109.0 | Web Framework & API |
+| **Language** | Python | 3.11+ | Programming Language |
+| **ASGI Server** | Uvicorn | 0.27.0 | Production Server |
+| **Data Validation** | Pydantic | 2.5.3 | Request/Response Models |
+| **HTTP Client** | HTTPX | 0.26.0 | Async HTTP Requests |
+| **PDF Parser** | PyPDF2 | 3.0.1 | PDF Text Extraction |
+| **Tokenizer** | tiktoken | 0.5.2 | Token Counting & Chunking |
+| **Environment** | python-dotenv | 1.0.0 | Environment Variables |
+| **CORS** | FastAPI CORS | - | Cross-Origin Support |
+| **Logging** | Python Logging | - | Application Logging |
+
+**Backend Dependencies (`backend/requirements.txt`)**:
+```txt
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+httpx==0.26.0
+python-dotenv==1.0.0
+PyPDF2==3.0.1
+tiktoken==0.5.2
+python-multipart==0.0.6
+qdrant-client==1.7.0
+google-generativeai==0.3.2
+cohere==4.37
+```
+
+### AI & ML Services
+
+| Service | Model/Version | Purpose | API Endpoint |
+|---------|---------------|---------|--------------|
+| **LLM** | Google Gemini 2.5 Flash | Answer Generation | `generativelanguage.googleapis.com` |
+| **Embeddings** | text-embedding-004 | Vector Representations (768D) | `generativelanguage.googleapis.com` |
+| **Vector Database** | Qdrant Cloud v1.7+ | Semantic Search & Storage | `cloud.qdrant.io` |
+| **Reranking** | Cohere Rerank v3.0 | Result Reranking | `api.cohere.ai` |
+
+**Model Specifications**:
+
+| Model | Provider | Dimensions/Context | Cost | Use Case |
+|-------|----------|-------------------|------|----------|
+| **Gemini 2.5 Flash** | Google | 1M tokens context | Free tier: 1500 RPD | Fast, efficient answer generation |
+| **text-embedding-004** | Google | 768 dimensions | Free tier: 1500 RPD | High-quality embeddings |
+| **Qdrant Cloud** | Qdrant | 1GB free storage | Free tier | Vector similarity search |
+| **Rerank v3.0** | Cohere | English optimized | Free tier: 100 calls/min | Relevance reranking |
+
+### Development Tools
+
+| Category | Tool | Purpose |
+|----------|------|---------|
+| **Version Control** | Git | Source code management |
+| **Repository** | GitHub | Code hosting & collaboration |
+| **API Testing** | Swagger UI / Postman | API endpoint testing |
+| **Code Formatting** | Black (Python) | Python code formatter |
+| **Linting** | ESLint (JavaScript) | JavaScript code linter |
+| **Package Management** | pip (Python), npm (JavaScript) | Dependency management |
+| **Environment Management** | python-dotenv | Secrets & configuration |
+
+### Deployment & Infrastructure
+
+| Component | Platform | Tier | Configuration |
+|-----------|----------|------|---------------|
+| **Frontend Hosting** | Vercel | Free | Static site deployment |
+| **Backend Hosting** | Render | Free | Web service (Docker) |
+| **Vector Database** | Qdrant Cloud | Free (1GB) | Cloud-hosted |
+| **CDN** | Vercel Edge Network | Free | Global content delivery |
+| **DNS** | Vercel | Free | Custom domain support |
+| **SSL/TLS** | Vercel/Render | Free | Automatic HTTPS |
+
+**Deployment Architecture**:
+```
+┌──────────────────────────────────────────────────────┐
+│                    VERCEL (Frontend)                 │
+│  - Static site hosting                               │
+│  - Global CDN                                        │
+│  - Automatic HTTPS                                   │
+│  - Instant rollback                                  │
+└──────────────────────────────────────────────────────┘
+                         │
+                         │ REST API Calls
+                         ▼
+┌──────────────────────────────────────────────────────┐
+│                  RENDER (Backend)                    │
+│  - FastAPI application                               │
+│  - Automatic deployments                             │
+│  - Health checks                                     │
+│  - Environment variables                             │
+└──────────────────────────────────────────────────────┘
+           │                │              │
+           │                │              │
+           ▼                ▼              ▼
+    ┌──────────┐   ┌──────────┐   ┌──────────┐
+    │  Gemini  │   │  Qdrant  │   │  Cohere  │
+    │   API    │   │  Cloud   │   │   API    │
+    └──────────┘   └──────────┘   └──────────┘
+```
+
+### External APIs & SDKs
+
+| API | SDK | Authentication | Rate Limits |
+|-----|-----|----------------|-------------|
+| Google Gemini | `google-generativeai` | API Key | 1500 requests/day (free) |
+| Qdrant Cloud | `qdrant-client` | API Key + URL | No rate limit (1GB free) |
+| Cohere | `cohere` | API Key | 100 calls/min (free) |
+
+---
+
+
+## 📁 Project Structure
+
+```
+Mini_RAG/
+├── rag-app/
+│   ├── frontend/                      # React Frontend Application
+│   │   ├── public/
+│   │   │   └── README.md              
+│   │   ├── src/
+│   │   │   ├── components/           # React Components
+│   │   │   │   ├── ChatInterface.jsx # Main chat UI
+│   │   │   │   ├── MessageBubble.jsx   # Message display
+│   │   │   │   ├── AnswerPanel.jsx     # Query input
+│   │   │   │   ├── SourceCard.jsx    # Citation cards
+│   │   │   │   ├── DocumentUpload.jsx # File upload UI
+│   │   │   │   └── Sidebar.jsx  # Toast notifications
+│   │   │   ├── services/             # API Service Layer
+│   │   │   │   ├── api.js          
+│   │   │   ├── document-management.css
+│   │   │   ├── index.css
+│   │   │   ├── App.jsx              # Root component
+│   │   │   └── main.jsx             # Entry point
+│   │   ├── package-lock.json
+│   │   ├── package.json             # Dependencies
+│   │   ├── vite.config.js           # Vite configuration
+│   │   ├── index.html               # HTML template
+│   │   └── README.md                # Frontend docs
+│   │
+│   ├── backend/                      # FastAPI Backend Application
+│   │   ├── app/
+│   │   │   ├── __init__.py
+│   │   │   ├── main.py              # FastAPI app entry
+│   │   │   ├── config.py            # Configuration settings
+│   │   │   ├── models/              # Pydantic Models
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── schemas.py      # schemas
+│   │   │   ├── services/            # Business Logic
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── llm.py
+│   │   │   │   ├── embeddings.py       # Gemini embeddings
+│   │   │   │   ├── vectorstore.py     # Qdrant operations
+│   │   │   │   ├── ingestion.py       
+│   │   │   │   └── retrievl.py      
+│   │   │   ├── routes/                 # API Routes
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── documents.py     # Document endpoints
+│   │   │   │   └── chat.py       
+│   │   │   └── utils/               # Helper Functions
+│   │   │       ├── __init__.py
+│   │   │       ├── chunking.py       
+│   │   │       ├── metadata.py
+│   │   │       └── parsers.py   
+│   │   ├── tests/                   # Unit Tests
+│   │   │   ├── __init__.py
+│   │   │   ├── test_parsers.py
+│   │   │   ├── test_chunking.py
+│   │   │   ├── test_embeddings.py
+│   │   │   └── test_api.py
+│   │   ├── .env                     # Environment variables
+│   │   ├── .env.example            # Environment template
+│   │   ├── requirements.txt        # Python dependencies
+│       └── README.md               # Backend docs
+│   
+│
+├── .gitignore                       # Git ignore rules
+├── LICENSE                          # MIT License 
+├── .python-version
+├── vector_clear.py
+└── README.md                        # This file
+```
+
+
+
 
 ## 🚀 Quick Start
 
