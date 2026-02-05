@@ -940,6 +940,7 @@ MIT License - See [LICENSE](LICENSE) for details.
 ## 📧 Contact
 
 **Priyanka** - [GitHub](https://github.com/priynka04)
+**Priyanka Chouhan** - [LinkedIn](https://www.linkedin.com/in/priynka04)
 
 **Project Link**: [https://github.com/priynka04/Mini_RAG](https://github.com/priynka04/Mini_RAG)
 
