@@ -355,18 +355,16 @@ VITE_BACKEND_URL=https://mini-rag-1-1xne.onrender.com # Development
 
 ---
 
-#### Q3: Multi-Hop Reasoning
-**Question**: "What are the differences between lists and tuples in Python, and when should I use each?"
+#### Q3:
+**Question**: "explain computational graphs."
 
-**Expected Answer**: Comparison of lists vs tuples with use-case recommendations
+**Expected Answer**: Explanation of computational graphs.
 
 **System Answer**:
-> "Lists and tuples are both sequence types in Python, but they differ in mutability [1]. Lists are mutable (can be modified after creation) while tuples are immutable (cannot be changed) [2]. Use lists when you need to modify data, such as maintaining a dynamic collection of items [3]. Use tuples when data should remain constant, like representing fixed coordinates or function return values with multiple values [3]."
+> "Computational graphs offer a really neat way to visualize and understand mathematical expressions [1]. Think of them as a diagram where each operation in an expression, along with the input variables, becomes a "node" [1]. For example, if you have an expression like `e = (a + b)(b + 1)`, you'd represent it with nodes for `a`, `b`, `1`, the two addition operations, and the multiplication operation [1]. Arrows connect these nodes to show how values flow; if one node's output is an input to another, an arrow points from the first to the second [1]. These graphs are particularly useful for understanding how derivatives work. When we talk about "derivatives on the edges," we're looking at how a change in one node directly affects another connected node – this is called a partial derivative [1]. For nodes that aren't directly connected, you calculate the overall effect by summing over all possible paths between them, multiplying the derivatives along each edge of those paths [1]. However, simply summing over all paths can become very complex due to a "combinatorial explosion" of possibilities [1]. To handle this more efficiently, techniques like forward-mode differentiation and reverse-mode differentiation (which is also known as backpropagation) are used [1]. These methods factor the paths, making the calculation of derivatives much more tractable [1]."
 
 **Sources**:
-- [1] Python Programming Guide, Section 3.2 (Score: 0.93)
-- [2] Python Programming Guide, Section 3.2 (Score: 0.90)
-- [3] Python Programming Guide, Section 3.4 (Score: 0.85)
+- [1] Computational_Graphs_backpropagation, Section 3.2 (Score: 0.986)
 
 **Evaluation**:
 - ✅ Clear comparison
