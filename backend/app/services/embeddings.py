@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class EmbeddingService:
     """
     Service for generating embeddings using Google Gemini API.
-    Uses text-embedding-004 model (768 dimensions).
+    Uses gemini-embedding-001 model (3072 dimensions).
     """
     
     def __init__(self):
