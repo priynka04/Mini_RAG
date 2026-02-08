@@ -64,3 +64,6 @@ class Settings(BaseSettings):
 
 # Global settings instance
 settings = Settings()
+
+print("🔥 EMBEDDING_MODEL =", settings.embedding_model)
+print("🔥 EMBEDDING_DIMENSION =", settings.embedding_dimension)
