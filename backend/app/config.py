@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Qdrant Cloud Configuration
     qdrant_url: str
     qdrant_api_key: str
-    qdrant_collection_name: str = "rag_doc"
+    qdrant_collection_name: str = "rag_3072"
     
     # Cohere Configuration (for reranking)
     cohere_api_key: str
@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     chat_history_turns: int = 3
     
     # LLM Settings
-    llm_model: str = "gemini-1.5-flash-latest"  # Correct model name for Gemini
-    embedding_model: str = "models/text-embedding-004"
-    embedding_dimension: int = 768  # Gemini embeddings are 768-dimensional
+    llm_model: str = "gemini-2.5-flash"  # Correct model name for Gemini
+    embedding_model: str = "models/gemini-embedding-001"
+    embedding_dimension: int = 3072  # Gemini embeddings are 768-dimensional
     
     # CORS Settings
     allowed_origins: str = "http://localhost:5173,http://localhost:3000"
