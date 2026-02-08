@@ -248,9 +248,9 @@ class VectorStoreService:
                 )
             
             # Search
-            results = self.client.search(
+            results = self.client.query_points(
                 collection_name=self.collection_name,
-                query_vector=query_embedding,
+                query=query_embedding,
                 limit=top_k,
                 score_threshold=score_threshold,
                 query_filter=query_filter,
@@ -259,7 +259,7 @@ class VectorStoreService:
             
             # Convert to RetrievedChunk objects
             retrieved_chunks = []
-            for result in results:
+            for result in results.points:
                 metadata = ChunkMetadata(
                     source=result.payload.get("source", ""),
                     title=result.payload.get("title", ""),
