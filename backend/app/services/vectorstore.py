@@ -41,7 +41,7 @@ class VectorStoreService:
             url=settings.qdrant_url,
             api_key=settings.qdrant_api_key,
         )
-        self.collection_name = "rag_doc"
+        self.collection_name = "rag_3072"
         self.vector_size = settings.embedding_dimension
         
         logger.info(f"Initialized VectorStoreService: {settings.qdrant_url}")
