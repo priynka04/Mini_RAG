@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     chat_history_turns: int = 3
     
     # LLM Settings
-    llm_model: str = "gemini-2.5-flash"  # Correct model name for Gemini
-    embedding_model: str = "models/gemini-embedding-001"
-    embedding_dimension: int = 3072  # Gemini embeddings are 768-dimensional
+    llm_model: str = "gemini-2.5-flash"  # Gemini 2.5 Flash
+    embedding_model: str = "models/gemini-embedding-001"  # Gemini embedding model
+    embedding_dimension: int = 3072  # Gemini embeddings are 3072-dimensional
     
     # CORS Settings
     allowed_origins: str = "http://localhost:5173,http://localhost:3000"
@@ -64,6 +64,5 @@ class Settings(BaseSettings):
 
 # Global settings instance
 settings = Settings()
-
 print("🔥 EMBEDDING_MODEL =", settings.embedding_model)
 print("🔥 EMBEDDING_DIMENSION =", settings.embedding_dimension)
