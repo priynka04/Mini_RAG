@@ -12,7 +12,7 @@ pydantic-settings==2.1.0
 google-generativeai==0.3.2
 
 # Vector database
-qdrant-client==1.7.3
+qdrant-client==1.16.2
 
 # Reranking
 cohere==4.47
@@ -28,10 +28,10 @@ tiktoken==0.5.2
 # Utilities
 httpx==0.26.0
 # Qdrant Client - Use latest version to avoid Pydantic validation errors
-qdrant-client>=1.7.0
+qdrant-client==1.16.2
 
 # Or pin to specific version if needed:
-# qdrant-client==1.11.3  # Latest as of Feb 2024
+# qdrant-client==1.16.2  # Latest as of Feb 2024
 
 # Other dependencies (adjust versions as needed)
 fastapi>=0.104.0
