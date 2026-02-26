@@ -2,6 +2,7 @@
 Qdrant vector store service for storing and retrieving document embeddings.
 """
 from typing import List, Dict, Any, Optional
+import os
 import logging
 from datetime import datetime
 import uuid
@@ -37,7 +38,7 @@ class VectorStoreService:
     
     def __init__(self):
         """Initialize Qdrant client."""
-        logger.info(f"QDRANT_API_KEY present: {bool(os.getenv('QDRANT_API_KEY'))}")
+        logger.info(f"QDRANT_API_KEY present: {bool(os.getenv('qdrant_api_key'))}")
         self.client = QdrantClient(
             url="https://2a8c885a-18d8-4b8e-8eb8-197f9820566d.europe-west3-0.gcp.cloud.qdrant.io",
             port=443,
