@@ -29,73 +29,71 @@ class ParsedDocument:
 
 
 class DocumentParser:
-    """Parse different document formats and extract content."""
-    
-   @staticmethod
-   def parse_pdf(file_path: str) -> ParsedDocument:
-     try:
-        reader = PdfReader(file_path)
+    @staticmethod    
+    def parse_pdf(file_path: str) -> ParsedDocument:
+         try:
+             reader = PdfReader(file_path)
 
-        text_parts = []
-        all_links = []
-        image_references = []
+             text_parts = []
+             all_links = []
+             image_references = []
 
-        for page_num, page in enumerate(reader.pages, 1):
-            page_text = page.extract_text()
-            if page_text:
-                text_parts.append(page_text)
+            for page_num, page in enumerate(reader.pages, 1):
+                 page_text = page.extract_text()
+                 if page_text:
+                    text_parts.append(page_text)
 
-            if "/Annots" in page:
-                for annotation in page["/Annots"]:
+                 if "/Annots" in page:
+                  for annotation in page["/Annots"]:
                     obj = annotation.get_object()
                     if "/A" in obj and "/URI" in obj["/A"]:
                         uri = obj["/A"]["/URI"]
                         if uri and uri not in all_links:
                             all_links.append(uri)
 
-            if "/Resources" in page and "/XObject" in page["/Resources"]:
-                xobjects = page["/Resources"]["/XObject"].get_object()
-                for obj_name in xobjects:
+                 if "/Resources" in page and "/XObject" in page["/Resources"]:
+                  xobjects = page["/Resources"]["/XObject"].get_object()
+                  for obj_name in xobjects:
                     obj = xobjects[obj_name]
                     if obj.get("/Subtype") == "/Image":
                         image_references.append(f"page_{page_num}_{obj_name}")
 
-        full_text = "\n\n".join(text_parts)
+            full_text = "\n\n".join(text_parts)
 
         # ✅ OCR FALLBACK (CORRECT INDENTATION)
-        if not full_text.strip():
-            logger.warning("No text found via pypdf. Falling back to OCR...")
+            if not full_text.strip():
+                logger.warning("No text found via pypdf. Falling back to OCR...")
 
-            from pdf2image import convert_from_path
-            import pytesseract
+                 from pdf2image import convert_from_path
+                 import pytesseract
 
-            images = convert_from_path(file_path)
-            ocr_text = []
+                 images = convert_from_path(file_path)
+                 ocr_text = []
 
-            for img in images:
-                text = pytesseract.image_to_string(img)
-                if text.strip():
-                    ocr_text.append(text)
+                 for img in images:
+                     text = pytesseract.image_to_string(img)
+                     if text.strip():
+                        ocr_text.append(text)
 
-            full_text = "\n".join(ocr_text)
+                 full_text = "\n".join(ocr_text)
 
-        metadata = reader.metadata
-        title = metadata.title if metadata and metadata.title else Path(file_path).stem
+            metadata = reader.metadata
+            title = metadata.title if metadata and metadata.title else Path(file_path).stem
 
-        text_links = DocumentParser._extract_urls_from_text(full_text)
-        all_links.extend([l for l in text_links if l not in all_links])
+            text_links = DocumentParser._extract_urls_from_text(full_text)
+            all_links.extend([l for l in text_links if l not in all_links])
 
-        logger.info(
-            f"Parsed PDF: {len(reader.pages)} pages, "
-            f"{len(all_links)} links, {len(image_references)} images"
-        )
+            logger.info(
+                f"Parsed PDF: {len(reader.pages)} pages, "
+                f"{len(all_links)} links, {len(image_references)} images"
+             )
 
-        return ParsedDocument(
-            text=full_text,
-            links=all_links,
-            images=image_references,
-            title=title
-        )
+             return ParsedDocument(
+                 text=full_text,
+                 links=all_links,
+                 images=image_references,
+                 title=title
+             )
 
     except Exception as e:
         logger.error(f"Error parsing PDF {file_path}: {e}")
