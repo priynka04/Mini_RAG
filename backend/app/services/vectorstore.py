@@ -38,13 +38,11 @@ class VectorStoreService:
     
     def __init__(self):
         """Initialize Qdrant client."""
-        logger.info(f"QDRANT_API_KEY present: {bool(os.getenv('qdrant_api_key'))}")
+        logger.info(f"QDRANT_API_KEY present: {bool(os.getenv("QDRANT_API_KEY"))}")
         self.client = QdrantClient(
-            url="https://a44297bf-f7c2-4ce3-b81d-7a01b1ab7f96.sa-east-1-0.aws.cloud.qdrant.io",
-            port=443,
+            url=settings.qdrant_url,
             api_key=settings.qdrant_api_key,
             https=True,
-            prefix="/v1",
             timeout=30
         )
         self.collection_name = "rag_3072"
