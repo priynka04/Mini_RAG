@@ -30,8 +30,8 @@ class Settings(BaseSettings):
     
     # LLM Settings
     llm_model: str = "gemini-2.5-flash"  # Gemini 2.5 Flash
-    embedding_model: str = "models/gemini-embedding-001"  # Gemini embedding model
-    embedding_dimension: int = 3072  # Gemini embeddings are 3072-dimensional
+    embedding_model: str = "models/text-embedding-004"  # Gemini embedding model
+    embedding_dimension: int = 768  # Gemini embeddings are 3072-dimensional
     
     # CORS Settings
     allowed_origins: str = "http://localhost:5173,http://localhost:3000"
