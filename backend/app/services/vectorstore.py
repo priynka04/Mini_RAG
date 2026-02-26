@@ -38,7 +38,7 @@ class VectorStoreService:
     def __init__(self):
         """Initialize Qdrant client."""
         self.client = QdrantClient(
-            host=settings.qdrant_url.replace("https://", ""),
+            url="https://2a8c885a-18d8-4b8e-8eb8-197f9820566d.europe-west3-0.gcp.cloud.qdrant.io",
             port=443,
             api_key=settings.qdrant_api_key,
             https=True,
