@@ -40,7 +40,7 @@ class VectorStoreService:
         """Initialize Qdrant client."""
         logger.info(f"QDRANT_API_KEY present: {bool(os.getenv('qdrant_api_key'))}")
         self.client = QdrantClient(
-            url="https://2a8c885a-18d8-4b8e-8eb8-197f9820566d.europe-west3-0.gcp.cloud.qdrant.io",
+            url="https://a44297bf-f7c2-4ce3-b81d-7a01b1ab7f96.sa-east-1-0.aws.cloud.qdrant.io",
             port=443,
             api_key=settings.qdrant_api_key,
             https=True,
