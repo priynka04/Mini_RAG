@@ -38,7 +38,7 @@ class VectorStoreService:
     
     def __init__(self):
         """Initialize Qdrant client."""
-        logger.info(f"QDRANT_API_KEY present: {bool(os.getenv("QDRANT_API_KEY"))}")
+        logger.info(f"QDRANT_API_KEY present: {bool(os.getenv('QDRANT_API_KEY'))}")
         self.client = QdrantClient(
             url=settings.qdrant_url,
             api_key=settings.qdrant_api_key,
