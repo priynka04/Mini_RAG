@@ -42,6 +42,7 @@ class VectorStoreService:
             port=443,
             api_key=settings.qdrant_api_key,
             https=True,
+            prefix="/v1",
             timeout=30
         )
         self.collection_name = "rag_3072"
