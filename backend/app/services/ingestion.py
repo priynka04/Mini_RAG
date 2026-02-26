@@ -117,7 +117,7 @@ class IngestionService:
                 "images_extracted": len(parsed.images),
                 "processing_time_ms": processing_time
             }
-            
+            logger.info(f"Parsed text length: {len(parsed.text)}")
             logger.info(f"✓ Text ingestion complete: {count} chunks in {processing_time:.0f}ms")
             return result
             
@@ -224,7 +224,7 @@ class IngestionService:
                 "images_extracted": len(parsed.images),
                 "processing_time_ms": processing_time
             }
-            
+            logger.info(f"Parsed text preview: {parsed.text[:300]}")
             logger.info(
                 f"✓ File ingestion complete: {count} chunks in {processing_time:.0f}ms"
             )
