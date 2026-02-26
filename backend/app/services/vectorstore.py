@@ -50,7 +50,9 @@ class VectorStoreService:
         
         logger.info(f"Initialized VectorStoreService: {settings.qdrant_url}")
         logger.info(f"Collection: {self.collection_name}")
-    
+        logger.info(f"Connecting to Qdrant at: {settings.qdrant_url}")
+        logger.info(f"API key present: {bool(settings.qdrant_api_key)}")
+        
     def create_collection(self, recreate: bool = False) -> bool:
         """
         Create Qdrant collection if it doesn't exist.
