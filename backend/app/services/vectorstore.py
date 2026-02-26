@@ -98,8 +98,8 @@ class VectorStoreService:
             True if collection exists
         """
         try:
-            collections = self.client.get_collections().collections
-            return any(c.name == self.collection_name for c in collections)
+            self.client.get_collection(self.collection_name)
+            return True
         except Exception as e:
             logger.error(f"Error checking collection existence: {e}")
             return False
