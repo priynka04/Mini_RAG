@@ -52,7 +52,11 @@ class VectorStoreService:
         logger.info(f"Collection: {self.collection_name}")
         logger.info(f"Connecting to Qdrant at: {settings.qdrant_url}")
         logger.info(f"API key present: {bool(settings.qdrant_api_key)}")
-        
+        # Ensure collection exists
+        if not self.collection_exists():
+            logger.info(f"Collection '{self.collection_name}' not found. Creating it...")
+            self.create_collection()
+            
     def create_collection(self, recreate: bool = False) -> bool:
         """
         Create Qdrant collection if it doesn't exist.
@@ -145,12 +149,16 @@ class VectorStoreService:
         Returns:
             Number of points upserted
         """
+        logger.info(f"Preparing to upsert {len(chunks)} chunks with embeddings of length {len(embeddings)} and metadatas {len(metadatas)}")
         if len(chunks) != len(embeddings) != len(metadatas):
             raise ValueError("Chunks, embeddings, and metadatas must have same length")
         
         if not chunks:
             return 0
-        
+        for i, emb in enumerate(embeddings):
+            if len(emb) != self.vector_size:
+                logger.error(f"Embedding at index {i} has length {len(emb)}, expected {self.vector_size}")
+                return 0
         try:
             # Create points
             points = []
@@ -176,17 +184,17 @@ class VectorStoreService:
                 points.append(point)
             
             # Upsert to Qdrant
-            self.client.upsert(
+            resp=self.client.upsert(
                 collection_name=self.collection_name,
                 points=points
             )
-            
+            logger.info(f"Qdrant upsert response: {resp}")
             logger.info(f"✓ Upserted {len(points)} chunks to Qdrant")
             return len(points)
             
         except Exception as e:
             logger.error(f"Error upserting chunks: {e}")
-            return False
+            return 0
     
     def delete_by_source(self, source: str) -> bool:
         """
