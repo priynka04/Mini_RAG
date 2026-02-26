@@ -91,7 +91,9 @@ class DocumentParser:
             
             logger.info(f"Parsed PDF: {len(text_parts)} pages, "
                        f"{len(all_links)} links, {len(image_references)} images")
-            
+            logger.warning(f"FINAL extracted text length: {len(full_text)}")
+            if not full_text.strip():
+            raise ValueError("No extractable text found in PDF (likely scanned)")
             return ParsedDocument(
                 text=full_text,
                 links=all_links,
