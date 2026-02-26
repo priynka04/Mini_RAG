@@ -31,91 +31,75 @@ class ParsedDocument:
 class DocumentParser:
     """Parse different document formats and extract content."""
     
-    @staticmethod
-    def parse_pdf(file_path: str) -> ParsedDocument:
-        """
-        Parse PDF file and extract text, links, and image references.
-        
-        Args:
-            file_path: Path to PDF file
-            
-        Returns:
-            ParsedDocument with extracted content
-        """
-        try:
-            reader = PdfReader(file_path)
-            
-            # Extract text from all pages
-            text_parts = []
-            all_links = []
-            image_references = []
-            
-            for page_num, page in enumerate(reader.pages, 1):
-                # Extract text
-                page_text = page.extract_text()
-                if page_text:
-                    text_parts.append(page_text)
-                
-                # Extract links from annotations
-                if "/Annots" in page:
-                    annotations = page["/Annots"]
-                    for annotation in annotations:
-                        obj = annotation.get_object()
-                        if "/A" in obj and "/URI" in obj["/A"]:
-                            uri = obj["/A"]["/URI"]
-                            if uri and uri not in all_links:
-                                all_links.append(uri)
-                
-                # Track image references (PDFs contain images, but we store references)
-                if "/Resources" in page and "/XObject" in page["/Resources"]:
-                    xobjects = page["/Resources"]["/XObject"].get_object()
-                    for obj_name in xobjects:
-                        obj = xobjects[obj_name]
-                        if obj["/Subtype"] == "/Image":
-                            image_ref = f"page_{page_num}_{obj_name}"
-                            image_references.append(image_ref)
-            
-            full_text = "\n\n".join(text_parts)
-            
-            # Extract title from metadata or filename
-            metadata = reader.metadata
-            title = ""
-            if metadata and metadata.title:
-                title = metadata.title
-            else:
-                title = Path(file_path).stem
-            
-            # Also extract URLs from text content
-            text_links = DocumentParser._extract_urls_from_text(full_text)
-            all_links.extend([link for link in text_links if link not in all_links])
-            
-            logger.info(f"Parsed PDF: {len(text_parts)} pages, "
-                       f"{len(all_links)} links, {len(image_references)} images")
-            logger.warning(f"FINAL extracted text length: {len(full_text)}")
-           if not full_text.strip():
-             logger.warning("No text found via pypdf. Falling back to OCR...")
-    
-             from pdf2image import convert_from_path
-             import pytesseract
-    
-             images = convert_from_path(file_path)
-             ocr_text = []
-             for img in images:
+   @staticmethod
+   def parse_pdf(file_path: str) -> ParsedDocument:
+     try:
+        reader = PdfReader(file_path)
+
+        text_parts = []
+        all_links = []
+        image_references = []
+
+        for page_num, page in enumerate(reader.pages, 1):
+            page_text = page.extract_text()
+            if page_text:
+                text_parts.append(page_text)
+
+            if "/Annots" in page:
+                for annotation in page["/Annots"]:
+                    obj = annotation.get_object()
+                    if "/A" in obj and "/URI" in obj["/A"]:
+                        uri = obj["/A"]["/URI"]
+                        if uri and uri not in all_links:
+                            all_links.append(uri)
+
+            if "/Resources" in page and "/XObject" in page["/Resources"]:
+                xobjects = page["/Resources"]["/XObject"].get_object()
+                for obj_name in xobjects:
+                    obj = xobjects[obj_name]
+                    if obj.get("/Subtype") == "/Image":
+                        image_references.append(f"page_{page_num}_{obj_name}")
+
+        full_text = "\n\n".join(text_parts)
+
+        # ✅ OCR FALLBACK (CORRECT INDENTATION)
+        if not full_text.strip():
+            logger.warning("No text found via pypdf. Falling back to OCR...")
+
+            from pdf2image import convert_from_path
+            import pytesseract
+
+            images = convert_from_path(file_path)
+            ocr_text = []
+
+            for img in images:
                 text = pytesseract.image_to_string(img)
                 if text.strip():
-                   ocr_text.append(text)
+                    ocr_text.append(text)
 
-             full_text = "\n".join(ocr_text)
-             return ParsedDocument(
-                text=full_text,
-                links=all_links,
-                images=image_references,
-                title=title
-            )
-            
-        except Exception as e:
-            logger.error(f"Error parsing PDF {file_path}: {e}")
-            raise
+            full_text = "\n".join(ocr_text)
+
+        metadata = reader.metadata
+        title = metadata.title if metadata and metadata.title else Path(file_path).stem
+
+        text_links = DocumentParser._extract_urls_from_text(full_text)
+        all_links.extend([l for l in text_links if l not in all_links])
+
+        logger.info(
+            f"Parsed PDF: {len(reader.pages)} pages, "
+            f"{len(all_links)} links, {len(image_references)} images"
+        )
+
+        return ParsedDocument(
+            text=full_text,
+            links=all_links,
+            images=image_references,
+            title=title
+        )
+
+    except Exception as e:
+        logger.error(f"Error parsing PDF {file_path}: {e}")
+        raise
     
     @staticmethod
     def parse_text(file_path: str) -> ParsedDocument:
