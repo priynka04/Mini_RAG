@@ -101,8 +101,10 @@ class DocumentParser:
              images = convert_from_path(file_path)
              ocr_text = []
              for img in images:
-                ocr_text.append(pytesseract.image_to_string(img))
-    
+                text = pytesseract.image_to_string(img)
+                if text.strip():
+                   ocr_text.append(text)
+
              full_text = "\n".join(ocr_text)
              return ParsedDocument(
                 text=full_text,
