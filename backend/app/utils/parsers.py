@@ -92,9 +92,19 @@ class DocumentParser:
             logger.info(f"Parsed PDF: {len(text_parts)} pages, "
                        f"{len(all_links)} links, {len(image_references)} images")
             logger.warning(f"FINAL extracted text length: {len(full_text)}")
-            if not full_text.strip():
-            raise ValueError("No extractable text found in PDF (likely scanned)")
-            return ParsedDocument(
+           if not full_text.strip():
+             logger.warning("No text found via pypdf. Falling back to OCR...")
+    
+             from pdf2image import convert_from_path
+             import pytesseract
+    
+             images = convert_from_path(file_path)
+             ocr_text = []
+             for img in images:
+                ocr_text.append(pytesseract.image_to_string(img))
+    
+             full_text = "\n".join(ocr_text)
+             return ParsedDocument(
                 text=full_text,
                 links=all_links,
                 images=image_references,
