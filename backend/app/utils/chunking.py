@@ -85,7 +85,8 @@ class TextChunker:
                 break
             
             start = end - self.chunk_overlap
-        
+        logger.info(f"DEBUG chunks count before embedding: {len(chunks)}")
+        logger.info(f"DEBUG first chunk length: {len(chunks[0]) if chunks else 'NONE'}")
         logger.info(f"Created {len(chunks)} chunks from {total_tokens} tokens")
         return chunks
     
@@ -165,8 +166,8 @@ def create_chunks_from_document(
     title: str = "",
     links: List[str] = None,
     images: List[str] = None,
-    chunk_size: int = 1000,
-    chunk_overlap: int = 120
+    chunk_size: int = 300,
+    chunk_overlap: int = 50
 ) -> List[Tuple[str, dict]]:
     """
     Convenience function to create chunks with full metadata.
