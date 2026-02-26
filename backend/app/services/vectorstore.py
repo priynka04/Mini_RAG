@@ -40,6 +40,7 @@ class VectorStoreService:
         self.client = QdrantClient(
             url=settings.qdrant_url,
             api_key=settings.qdrant_api_key,
+            https=True
         )
         self.collection_name = "rag_3072"
         self.vector_size = settings.embedding_dimension
@@ -86,7 +87,7 @@ class VectorStoreService:
 
         except Exception as e:
             logger.error(f"Error creating collection: {e}")
-        raise
+            return False 
 
 
     def collection_exists(self) -> bool:
@@ -180,7 +181,7 @@ class VectorStoreService:
             
         except Exception as e:
             logger.error(f"Error upserting chunks: {e}")
-            raise
+            return False
     
     def delete_by_source(self, source: str) -> bool:
         """
@@ -213,7 +214,7 @@ class VectorStoreService:
             
         except Exception as e:
             logger.error(f"Error deleting by source: {e}")
-            raise
+            return False
     
     def search(
         self,
@@ -283,7 +284,7 @@ class VectorStoreService:
             
         except Exception as e:
             logger.error(f"Error searching vector store: {e}")
-            raise
+            return False
     
     def count_points(self) -> int:
         """
