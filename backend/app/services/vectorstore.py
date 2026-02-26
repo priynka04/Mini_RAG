@@ -38,9 +38,10 @@ class VectorStoreService:
     def __init__(self):
         """Initialize Qdrant client."""
         self.client = QdrantClient(
-            url=settings.qdrant_url,
+            host=settings.qdrant_url.replace("https://", ""),
             api_key=settings.qdrant_api_key,
-            https=True
+            https=True,
+            timeout=30
         )
         self.collection_name = "rag_3072"
         self.vector_size = settings.embedding_dimension
