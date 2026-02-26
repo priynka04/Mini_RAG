@@ -21,6 +21,9 @@ cohere==4.47
 pypdf==4.0.1
 python-docx==1.1.0
 markdown==3.5.2
+pytesseract
+pdf2image
+Pillow
 
 # Text processing and chunking
 tiktoken==0.5.2
@@ -39,3 +42,6 @@ uvicorn>=0.24.0
 pydantic>=2.0.0
 pydantic-settings>=2.0.0
 python-multipart>=0.0.6
+
+tesseract-ocr
+poppler-utils
